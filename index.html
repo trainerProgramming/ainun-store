@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ainun Store - Digital Product Marketplace</title>
+    
+    <script type="text/javascript"
+      src="https://app.sandbox.midtrans.com/snap/snap.js"
+      data-client-key="SB-Mid-client-ePNdnhZD2jL4CLl6"></script>
+
+    <style>
+        /* --- CONFIGURATION & RESET --- */
+        :root {
+            --primary-red: #ff0000;
+            --dark-bg: #0f0f0f;
+            --card-bg: #1a1a1a;
+            --text-main: #ffffff;
+            --text-gray: #a0a0a0;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* --- UTILITIES --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary { background-color: var(--primary-red); color: white; }
+        .btn-primary:hover { background-color: #cc0000; transform: translateY(-3px); }
+        
+        .btn-outline { border: 2px solid var(--primary-red); color: var(--primary-red); background: transparent; }
+        .btn-outline:hover { background: var(--primary-red); color: white; }
+
+        section { padding: 80px 0; }
+
+        /* --- NAVBAR --- */
+        nav {
+            background-color: rgba(15, 15, 15, 0.95);
+            height: 80px;
+            display: flex;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 1px solid #333;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-red);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a:hover { color: var(--primary-red); }
+
+        .menu-toggle { display: none; cursor: pointer; font-size: 1.5rem; }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            padding-top: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .hero-text { flex: 1; }
+        .hero-text h1 { font-size: 3.5rem; line-height: 1.2; margin-bottom: 20px; }
+        .hero-text p { color: var(--text-gray); font-size: 1.1rem; margin-bottom: 30px; max-width: 500px; }
+        .hero-btns { display: flex; gap: 15px; }
+
+        .hero-img { flex: 1; text-align: right; }
+        .hero-img img { width: 100%; max-width: 500px; border-radius: 20px; box-shadow: var(--shadow); }
+
+        /* --- FEATURES SECTION --- */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid #222;
+        }
+
+        .feature-card:hover { border-color: var(--primary-red); transform: translateY(-10px); }
+        .feature-card h3 { margin-bottom: 15px; color: var(--primary-red); }
+        .feature-card p { color: var(--text-gray); font-size: 0.9rem; }
+
+        /* --- PRODUCT SECTION --- */
+        .section-title { text-align: center; margin-bottom: 50px; font-size: 2.5rem; }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid #222;
+            transition: var(--transition);
+        }
+
+        .product-card:hover { box-shadow: var(--shadow); transform: scale(1.02); }
+        .product-img { width: 100%; height: 200px; background: #333; overflow: hidden; }
+        .product-img img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .product-info { padding: 25px; }
+        .product-info h3 { margin-bottom: 10px; }
+        .product-info p { color: var(--text-gray); font-size: 0.9rem; margin-bottom: 20px; }
+        .price { font-size: 1.5rem; font-weight: 700; color: var(--primary-red); margin-bottom: 20px; display: block; }
+
+        /* --- CHECKOUT MODAL --- */
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active { display: flex; }
+
+        .checkout-form {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+        }
+
+        .close-modal { position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 1.5rem; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-gray); }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background: #222;
+            border: 1px solid #444;
+            border-radius: 10px;
+            color: white;
+            outline: none;
+        }
+
+        .form-group input:focus { border-color: var(--primary-red); }
+
+        /* --- FAQ SECTION --- */
+        .faq-item {
+            background: var(--card-bg);
+            margin-bottom: 15px;
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid #222;
+        }
+        .faq-item h4 { color: var(--primary-red); margin-bottom: 10px; }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #050505;
+            padding: 50px 0;
+            text-align: center;
+            border-top: 1px solid #222;
+        }
+        .footer-text { color: var(--text-gray); font-size: 0.8rem; margin-top: 20px; }
+
+        /* --- LOADING ANIMATION --- */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .hero { flex-direction: column; text-align: center; padding-top: 120px; }
+            .hero-text h1 { font-size: 2.5rem; }
+            .hero-btns { justify-content: center; }
+            .nav-links { display: none; }
+            .menu-toggle { display: block; }
+            .hero-img img { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="container nav-content">
+            <a href="#" class="logo">Ainun Store</a>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#produk">Produk</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#kontak">Kontak</a></li>
+            </ul>
+            <div class="menu-toggle">☰</div>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <section class="hero">
+            <div class="hero-text">
+                <h1>Level Up Aset Digital Anda Sekali Klik.</h1>
+                <p>Temukan koleksi aset digital premium mulai dari template desain hingga kursus eksklusif untuk mempercepat pertumbuhan bisnis Anda.</p>
+                <div class="hero-btns">
+                    <a href="#produk" class="btn btn-primary">Lihat Produk</a>
+                    <a href="#produk" class="btn btn-outline">Beli Sekarang</a>
+                </div>
+            </div>
+            <div class="hero-img">
+                <img src="https://placehold.net/default.png" alt="Ainun Store Digital Mockup">
+            </div>
+        </section>
+
+        <section>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>Premium Quality</h3>
+                    <p>Setiap produk dikurasi secara ketat untuk menjamin kualitas terbaik bagi pelanggan.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Lifetime Access</h3>
+                    <p>Beli sekali, nikmati akses selamanya termasuk pembaruan produk di masa depan.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Beginner Friendly</h3>
+                    <p>Produk dirancang agar mudah digunakan bahkan oleh orang awam sekalipun.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Eco-Friendly</h3>
+                    <p>Tanpa limbah fisik. Pengiriman instan langsung ke email Anda dalam hitungan detik.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="produk">
+            <h2 class="section-title">Produk Unggulan</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-img"><img src="https://placehold.net/default.png" alt="Kopi"></div>
+                    <div class="product-info">
+                        <h3>E-Book: Master Kopi Digital</h3>
+                        <p>Pelajari cara membangun bisnis kopi dari nol dengan strategi pemasaran digital.</p>
+                        <span class="price">Rp 50,000</span>
+                        <button class="btn btn-primary" onclick="openCheckout('E-Book Master Kopi', 50000)">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-img"><img src="https://placehold.net/default.png" alt="Keripik"></div>
+                    <div class="product-info">
+                        <h3>Template Desain Keripik</h3>
+                        <p>Koleksi template packaging keripik siap pakai untuk meningkatkan branding.</p>
+                        <span class="price">Rp 75,000</span>
+                        <button class="btn btn-primary" onclick="openCheckout('Template Desain Keripik', 75000)">Beli Sekarang</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-img"><img src="https://placehold.net/default.png" alt="Digital Asset"></div>
+                    <div class="product-info">
+                        <h3>Bundle Aset Digital Premium</h3>
+                        <p>Dapatkan semua aset terbaik kami dalam satu paket hemat eksklusif.</p>
+                        <span class="price">Rp 150,000</span>
+                        <button class="btn btn-primary" onclick="openCheckout('Bundle Aset Digital', 150000)">Beli Sekarang</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq">
+            <h2 class="section-title">Pertanyaan Umum</h2>
+            <div class="faq-item">
+                <h4>Bagaimana cara mendapatkan produknya?</h4>
+                <p>Setelah pembayaran berhasil, link download produk akan dikirimkan otomatis ke email yang Anda masukkan saat checkout.</p>
+            </div>
+            <div class="faq-item">
+                <h4>Apakah produk bisa dikembalikan?</h4>
+                <p>Karena ini adalah produk digital, kami tidak melayani pengembalian dana. Namun, kami menjamin kualitas produk sesuai deskripsi.</p>
+            </div>
+            <div class="faq-item">
+                <h4>Metode pembayaran apa saja yang tersedia?</h4>
+                <p>Kami menggunakan Midtrans yang mendukung Transfer Bank, E-Wallet (Gopay, OVO), QRIS, hingga kartu kredit.</p>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="logo">Ainun Store</div>
+            <p style="margin-top: 10px;">Solusi aset digital terbaik untuk masa depan Anda.</p>
+            <p class="footer-text">
+                &copy; 2024 Ainun Store. All Rights Reserved. <br>
+                Syarat & Ketentuan | Kebijakan Privasi
+            </p>
+        </div>
+    </footer>
+
+    <div class="modal" id="checkoutModal">
+        <div class="checkout-form">
+            <span class="close-modal" onclick="closeCheckout()">&times;</span>
+            <h3 style="margin-bottom: 20px;">Checkout Produk</h3>
+            <p id="selectedProduct" style="margin-bottom: 20px; font-weight: bold; color: var(--primary-red);"></p>
+            
+            <form id="paymentForm">
+                <div class="form-group">
+                    <label>Email Aktif</label>
+                    <input type="email" id="customer_email" placeholder="contoh@gmail.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Nomor WhatsApp</label>
+                    <input type="tel" id="customer_phone" placeholder="08123456789" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;" id="btnPay">
+                    Bayar Sekarang <div class="spinner" id="btnSpinner"></div>
+                </button>
+            </form>
+            <p style="font-size: 0.7rem; color: var(--text-gray); margin-top: 15px; text-align: center;">
+                Keamanan pembayaran dijamin oleh Midtrans Sandbox.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        let currentProduct = { name: '', price: 0 };
+
+        function openCheckout(name, price) {
+            currentProduct = { name, price };
+            document.getElementById('selectedProduct').innerText = name + ' - Rp ' + price.toLocaleString();
+            document.getElementById('checkoutModal').classList.add('active');
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkoutModal').classList.remove('active');
+        }
+
+        // INTEGRASI MIDTRANS
+        document.getElementById('paymentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const btnPay = document.getElementById('btnPay');
+            const spinner = document.getElementById('btnSpinner');
+            
+            // UI Loading
+            btnPay.disabled = true;
+            spinner.style.display = 'inline-block';
+
+            // Generate Order ID Otomatis
+            const order_id = "DE-" + Date.now();
+            const gross_amount = currentProduct.price;
+            const email = document.getElementById('customer_email').value;
+            const phone = document.getElementById('customer_phone').value;
+
+            /* CATATAN UNTUK DEVELOPER:
+               Frontend-only integration ke Midtrans Snap API memerlukan Server Key.
+               DI DUNIA NYATA: Server Key TIDAK BOLEH diletakkan di frontend (JS).
+               TAPI, untuk keperluan simulasi sandbox sesuai permintaan Anda:
+            */
+            
+            // Ganti ini dengan Server Key Sandbox Anda
+            const SERVER_KEY = "MASUKKAN_SERVER_KEY_SANDBOX_ANDA"; 
+            const base64Auth = btoa(SERVER_KEY + ":");
+
+            const payload = {
+                transaction_details: {
+                    order_id: order_id,
+                    gross_amount: gross_amount
+                },
+                item_details: [{
+                    id: "P1",
+                    price: gross_amount,
+                    quantity: 1,
+                    name: currentProduct.name
+                }],
+                customer_details: {
+                    email: email,
+                    phone: phone
+                }
+            };
+
+            try {
+                // Menggunakan CORS Proxy sesuai permintaan (TANPA TANDA TANYA)
+                const proxy = "https://corsproxy.io/";
+                const target = "https://app.sandbox.midtrans.com/snap/v1/transactions";
+                
+                const response = await fetch(proxy + target, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Basic ' + base64Auth
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (data.token) {
+                    window.snap.pay(data.token, {
+                        onSuccess: function(result) { alert("Pembayaran Berhasil!"); location.reload(); },
+                        onPending: function(result) { alert("Menunggu Pembayaran..."); },
+                        onError: function(result) { alert("Pembayaran Gagal!"); },
+                        onClose: function() { console.log('customer closed the popup without finishing the payment'); }
+                    });
+                } else {
+                    console.error("Payload Error:", data);
+                    alert("Gagal mendapatkan token transaksi. Cek Konsol/Server Key.");
+                }
+
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Terjadi kesalahan koneksi ke Midtrans.");
+            } finally {
+                btnPay.disabled = false;
+                spinner.style.display = 'none';
+            }
+        });
+
+        // Toggle Responsive Menu
+        document.querySelector('.menu-toggle').addEventListener('click', () => {
+            alert('Menu mobile akan muncul di sini (Vanilla Logic)');
+        });
+    </script>
+
+    <script
+    chatbot_id="69f2cad22ed14b89f28f3de1"
+    data-type="bar"
+    src="https://app.thinkstack.ai/bot/thinkstackai-loader.min.js"
+></script>
+
+
+</body>
+</html>
